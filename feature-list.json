@@ -17,23 +17,23 @@
       "id": "task",
       "priority": 1,
       "area": "Application",
-      "title": "Сделать каталог главной страницей",
-      "user_visible_behavior": "При входе на сайт должна отображаться главная страница с каталогом товаров. Текущая главная страница больше не нужна. Вход в профиль осуществляется через главную страницу.",
+      "title": "Исправление багов",
+      "user_visible_behavior": "1) При выходе из учетной записи не должна оставаться табличка с профилем, должна быть только кнопка входа. 2) При добавлении товара в избранное страница не должна обновляться. 3) url не должен содержать названия html страницы, должен быть апи адрес",
       "status": "passing",
       "verification": [
         "Тесты проходят успешно.",
         "Приложение корректно стартует и проходит health-check.",
-        "Функционал полностью работает."
+        "Ошибки исправлены."
       ],
       "evidence": [
-        "docker compose up -d --build → perfume-shop-app healthy on :8080",
-        "GET /actuator/health → {\"status\":\"UP\"}",
-        "mvnw.cmd test → 22/22 OK",
-        "GET / → 200, contains product-grid + auth-panel + auth-toggle, no /js/auth.js",
-        "GET /catalog.html → 200 redirect to /",
-        "AuthFlowTests.homePageIsCatalogWithAuth + CatalogProfileTests.catalogHomeShowsProfileAndAuthChrome"
+        "mvnw.cmd test — 23/23 OK (2026-10-24)",
+        "docker compose up -d --build — app+db healthy on :8080",
+        "GET /actuator/health — UP",
+        "Smoke: GET / → 200; GET /index.html → 302 Location:/; GET /catalog.html → 302 Location:/",
+        "catalog.js: syncFavoriteButtons + clearProfileUi; auth.css: [hidden]{display:none!important}",
+        "Exec plan: docs/exec-plans/complited/2026-10-24-bugfixes.md"
       ],
-      "notes": "Login/register panel on home catalog; legacy /catalog.html redirects to /."
+      "notes": "Logout: [hidden] CSS fix; favorites: in-place button sync; clean URLs via redirect filter/controller"
     }
   ]
 }

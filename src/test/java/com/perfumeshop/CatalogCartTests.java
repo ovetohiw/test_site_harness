@@ -122,7 +122,7 @@ class CatalogCartTests {
     }
 
     @Test
-    void catalogPageIsPublic() {
+    void catalogPageIsPublic() throws Exception {
         ResponseEntity<String> response = restTemplate.getForEntity(url("/"), String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).contains("Aether");
@@ -132,9 +132,21 @@ class CatalogCartTests {
         assertThat(response.getBody()).contains("id=\"profile-panel\"");
         assertThat(response.getHeaders().getContentType().toString()).contains(MediaType.TEXT_HTML_VALUE);
 
-        ResponseEntity<String> legacy = restTemplate.getForEntity(url("/catalog.html"), String.class);
-        assertThat(legacy.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(legacy.getBody()).contains("url=/");
+        assertRedirectsToHome("/catalog.html");
+        assertRedirectsToHome("/index.html");
+    }
+
+    private void assertRedirectsToHome(String path) throws Exception {
+        java.net.http.HttpClient client = java.net.http.HttpClient.newBuilder()
+                .followRedirects(java.net.http.HttpClient.Redirect.NEVER)
+                .build();
+        java.net.http.HttpResponse<Void> response = client.send(
+                java.net.http.HttpRequest.newBuilder(java.net.URI.create(url(path))).GET().build(),
+                java.net.http.HttpResponse.BodyHandlers.discarding()
+        );
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.FOUND.value());
+        String location = response.headers().firstValue("Location").orElse("");
+        assertThat(location).endsWith("/").doesNotContain(".html");
     }
 
     @Test

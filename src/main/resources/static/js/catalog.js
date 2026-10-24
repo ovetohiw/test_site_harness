@@ -163,11 +163,20 @@
                         });
                     favoriteIds = new Set(favorites.map((item) => item.id));
                     renderFavorites(favorites);
-                    renderProducts(products);
+                    syncFavoriteButtons();
                 } catch (err) {
                     showError(err.message);
                 }
             });
+        });
+    }
+
+    function syncFavoriteButtons() {
+        productGrid.querySelectorAll(".fav-btn").forEach((button) => {
+            const favored = favoriteIds.has(Number(button.dataset.id));
+            button.classList.toggle("is-on", favored);
+            button.setAttribute("aria-pressed", favored ? "true" : "false");
+            button.textContent = favored ? "♥" : "♡";
         });
     }
 
@@ -238,7 +247,7 @@
                     const favoritesNext = await api(`/api/favorites/${button.dataset.id}`, { method: "DELETE" });
                     favoriteIds = new Set(favoritesNext.map((item) => item.id));
                     renderFavorites(favoritesNext);
-                    await loadProducts();
+                    syncFavoriteButtons();
                 } catch (err) {
                     showError(err.message);
                 }
@@ -268,6 +277,18 @@
         }).join("");
     }
 
+    function clearProfileUi() {
+        navAvatar.src = "/images/avatar-default.svg";
+        navLogin.textContent = "Профиль";
+        profileAvatar.src = "/images/avatar-default.svg";
+        profileLogin.textContent = "";
+        profileMeta.textContent = "";
+        favoritesList.innerHTML = "";
+        favoritesEmpty.hidden = false;
+        ordersList.innerHTML = "";
+        ordersEmpty.hidden = false;
+    }
+
     function setAuthUi(user) {
         currentUser = user;
         if (user) {
@@ -285,6 +306,7 @@
             authToggle.hidden = false;
             profileToggle.hidden = true;
             openProfile(false);
+            clearProfileUi();
             favoriteIds = new Set();
         }
     }
@@ -452,11 +474,17 @@
         }
     });
 
-    logoutBtn.addEventListener("click", () => {
+    logoutBtn.addEventListener("click", async () => {
         clearToken();
         setAuthUi(null);
-        loadProducts().catch((err) => showError(err.message));
         openAuth(false);
+        try {
+            const cart = await api("/api/cart");
+            renderCart(cart);
+            await loadProducts();
+        } catch (err) {
+            showError(err.message);
+        }
     });
 
     async function init() {

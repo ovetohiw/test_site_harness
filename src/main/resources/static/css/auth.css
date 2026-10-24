@@ -19,6 +19,11 @@
     box-sizing: border-box;
 }
 
+/* Author CSS `display:` would otherwise override the HTML hidden attribute. */
+[hidden] {
+    display: none !important;
+}
+
 html,
 body {
     margin: 0;

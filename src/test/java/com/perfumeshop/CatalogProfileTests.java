@@ -197,6 +197,17 @@ class CatalogProfileTests {
         assertThat(script.getBody()).contains("quantity");
         assertThat(script.getBody()).contains("/api/auth/login");
         assertThat(script.getBody()).contains("/api/auth/register");
+        assertThat(script.getBody()).contains("function syncFavoriteButtons");
+        assertThat(script.getBody()).contains("function clearProfileUi");
+        assertThat(script.getBody()).contains("syncFavoriteButtons();");
+    }
+
+    @Test
+    void hiddenAttributeIsForcedInCss() {
+        ResponseEntity<String> css = restTemplate.getForEntity(url("/css/auth.css"), String.class);
+        assertThat(css.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(css.getBody()).contains("[hidden]");
+        assertThat(css.getBody()).contains("display: none !important");
     }
 
     private Long firstProductId() {

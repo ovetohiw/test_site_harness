@@ -10,6 +10,28 @@
 
 ## Лог сессий
 
+### Сессия 007
+
+- Дата: 2026-10-24
+- Цель: task — багфиксы logout / избранное / clean URLs
+- Сделано:
+  - `[hidden]` CSS fix — после выхода только кнопка «Вход»
+  - `syncFavoriteButtons` без полной перерисовки каталога
+  - `/catalog.html` и `/index.html` → 302 `/`
+  - Exec plan: `docs/exec-plans/complited/2026-10-24-bugfixes.md`
+- Запущенная верификация:
+  - `docker compose up -d --build` — OK; app+db healthy на `:8080`
+  - `GET /actuator/health` — UP
+  - `mvnw.cmd test` — 23/23 OK
+  - Smoke redirects + static JS/CSS — OK
+- Зафиксированные доказательства: см. `feature-list.json` → task.evidence
+- Коммиты: (pending)
+- Обновлённые файлы или артефакты: `src/**`, tests, `feature-list.json`, `PROGRESS.md`, `docs/exec-plans/**`
+- Известный риск или нерешённая проблема:
+  - Корзина не привязана к JWT (только `X-Cart-Id`)
+  - Порт 8080: конфликт локального run и docker `app`
+- Следующий лучший шаг: следующая фича в `feature-list.json`
+
 ### Сессия 006
 
 - Дата: 2026-10-24
