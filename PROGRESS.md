@@ -10,6 +10,28 @@
 
 ## Лог сессий
 
+### Сессия 006
+
+- Дата: 2026-10-24
+- Цель: task — каталог как главная страница; вход в профиль с главной
+- Сделано:
+  - `index.html` = каталог + панель входа/регистрации (`auth-panel`)
+  - `/catalog.html` → редирект на `/`; удалён `auth.js` (логика в `catalog.js`)
+  - Тесты: home = catalog + auth chrome
+  - Exec plan: `docs/exec-plans/complited/2026-10-24-catalog-as-home.md`
+- Запущенная верификация:
+  - `docker compose up -d --build` — OK; app+db healthy на `:8080`
+  - `GET /actuator/health` — UP
+  - `mvnw.cmd test` — 22/22 OK
+  - Smoke: `/` product-grid+auth-panel; `/catalog.html` redirect — OK
+- Зафиксированные доказательства: см. `feature-list.json` → task.evidence
+- Коммиты: (pending)
+- Обновлённые файлы или артефакты: `src/main/resources/static/**`, tests, `feature-list.json`, `PROGRESS.md`, `docs/exec-plans/**`
+- Известный риск или нерешённая проблема:
+  - Корзина не привязана к JWT (только `X-Cart-Id`)
+  - Порт 8080: конфликт локального run и docker `app`
+- Следующий лучший шаг: следующая фича в `feature-list.json`
+
 ### Сессия 005
 
 - Дата: 2026-10-24

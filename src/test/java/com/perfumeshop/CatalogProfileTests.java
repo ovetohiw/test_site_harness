@@ -172,7 +172,7 @@ class CatalogProfileTests {
     }
 
     @Test
-    void loginPageHasNoTechnicalTokenCopy() {
+    void homePageHasNoTechnicalTokenCopy() {
         ResponseEntity<String> response = restTemplate.getForEntity(url("/"), String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).doesNotContain("Токен");
@@ -181,9 +181,11 @@ class CatalogProfileTests {
     }
 
     @Test
-    void catalogShowsProfileChrome() {
-        ResponseEntity<String> page = restTemplate.getForEntity(url("/catalog.html"), String.class);
+    void catalogHomeShowsProfileAndAuthChrome() {
+        ResponseEntity<String> page = restTemplate.getForEntity(url("/"), String.class);
         assertThat(page.getBody()).contains("id=\"profile-panel\"");
+        assertThat(page.getBody()).contains("id=\"auth-panel\"");
+        assertThat(page.getBody()).contains("id=\"auth-form\"");
         assertThat(page.getBody()).contains("id=\"sort-field\"");
         assertThat(page.getBody()).contains("id=\"orders-title\"");
         assertThat(page.getBody()).contains("id=\"favorites-title\"");
@@ -193,6 +195,8 @@ class CatalogProfileTests {
         assertThat(script.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(script.getBody()).contains("qty-input");
         assertThat(script.getBody()).contains("quantity");
+        assertThat(script.getBody()).contains("/api/auth/login");
+        assertThat(script.getBody()).contains("/api/auth/register");
     }
 
     private Long firstProductId() {

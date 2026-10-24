@@ -135,10 +135,15 @@ class AuthFlowTests {
     }
 
     @Test
-    void loginPageIsServed() {
+    void homePageIsCatalogWithAuth() {
         ResponseEntity<String> response = restTemplate.getForEntity(url("/"), String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).contains("Aether");
+        assertThat(response.getBody()).contains("id=\"product-grid\"");
+        assertThat(response.getBody()).contains("id=\"auth-panel\"");
+        assertThat(response.getBody()).contains("id=\"auth-toggle\"");
+        assertThat(response.getBody()).contains("/js/catalog.js");
+        assertThat(response.getBody()).doesNotContain("/js/auth.js");
         assertThat(response.getHeaders().getContentType().toString()).contains(MediaType.TEXT_HTML_VALUE);
     }
 

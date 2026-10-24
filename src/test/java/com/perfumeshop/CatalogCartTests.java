@@ -123,7 +123,7 @@ class CatalogCartTests {
 
     @Test
     void catalogPageIsPublic() {
-        ResponseEntity<String> response = restTemplate.getForEntity(url("/catalog.html"), String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity(url("/"), String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).contains("Aether");
         assertThat(response.getBody()).contains("id=\"cart-panel\"");
@@ -131,6 +131,10 @@ class CatalogCartTests {
         assertThat(response.getBody()).contains("id=\"sort-field\"");
         assertThat(response.getBody()).contains("id=\"profile-panel\"");
         assertThat(response.getHeaders().getContentType().toString()).contains(MediaType.TEXT_HTML_VALUE);
+
+        ResponseEntity<String> legacy = restTemplate.getForEntity(url("/catalog.html"), String.class);
+        assertThat(legacy.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(legacy.getBody()).contains("url=/");
     }
 
     @Test

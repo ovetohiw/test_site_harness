@@ -16,7 +16,15 @@
     const cartBadge = document.getElementById("cart-badge");
     const checkoutBtn = document.getElementById("checkout-btn");
     const checkoutHint = document.getElementById("checkout-hint");
-    const authLink = document.getElementById("auth-link");
+    const authToggle = document.getElementById("auth-toggle");
+    const authClose = document.getElementById("auth-close");
+    const authPanel = document.getElementById("auth-panel");
+    const authForm = document.getElementById("auth-form");
+    const authError = document.getElementById("auth-error");
+    const loginInput = document.getElementById("login");
+    const passwordInput = document.getElementById("password");
+    const loginBtn = document.getElementById("login-btn");
+    const registerBtn = document.getElementById("register-btn");
     const profileToggle = document.getElementById("profile-toggle");
     const profileClose = document.getElementById("profile-close");
     const profilePanel = document.getElementById("profile-panel");
@@ -47,6 +55,10 @@
         return localStorage.getItem(TOKEN_KEY);
     }
 
+    function setToken(token) {
+        localStorage.setItem(TOKEN_KEY, token);
+    }
+
     function clearToken() {
         localStorage.removeItem(TOKEN_KEY);
     }
@@ -54,6 +66,11 @@
     function showError(message) {
         errorEl.hidden = !message;
         errorEl.textContent = message || "";
+    }
+
+    function showAuthError(message) {
+        authError.hidden = !message;
+        authError.textContent = message || "";
     }
 
     function formatPrice(value) {
@@ -254,7 +271,7 @@
     function setAuthUi(user) {
         currentUser = user;
         if (user) {
-            authLink.hidden = true;
+            authToggle.hidden = true;
             profileToggle.hidden = false;
             navAvatar.src = user.avatarUrl || "/images/avatar-default.svg";
             navLogin.textContent = user.login;
@@ -263,8 +280,9 @@
             profileMeta.textContent = user.createdAt
                 ? `С нами с ${formatDate(user.createdAt)}`
                 : "";
+            openAuth(false);
         } else {
-            authLink.hidden = false;
+            authToggle.hidden = false;
             profileToggle.hidden = true;
             openProfile(false);
             favoriteIds = new Set();
@@ -276,6 +294,7 @@
         cartToggle.setAttribute("aria-expanded", open ? "true" : "false");
         if (open) {
             openProfile(false);
+            openAuth(false);
         }
     }
 
@@ -284,6 +303,17 @@
         profileToggle.setAttribute("aria-expanded", open ? "true" : "false");
         if (open) {
             openCart(false);
+            openAuth(false);
+        }
+    }
+
+    function openAuth(open) {
+        authPanel.hidden = !open;
+        authToggle.setAttribute("aria-expanded", open ? "true" : "false");
+        if (open) {
+            openCart(false);
+            openProfile(false);
+            showAuthError("");
         }
     }
 
@@ -341,12 +371,72 @@
         await loadProfileData();
     }
 
+    async function completeAuth(data) {
+        setToken(data.token);
+        await restoreSession();
+        const cart = await api("/api/cart");
+        renderCart(cart);
+        await loadProducts();
+        openProfile(true);
+    }
+
     cartToggle.addEventListener("click", () => openCart(cartPanel.hidden));
     cartClose.addEventListener("click", () => openCart(false));
     profileToggle.addEventListener("click", () => openProfile(profilePanel.hidden));
     profileClose.addEventListener("click", () => openProfile(false));
+    authToggle.addEventListener("click", () => openAuth(authPanel.hidden));
+    authClose.addEventListener("click", () => openAuth(false));
     sortField.addEventListener("change", () => loadProducts().catch((err) => showError(err.message)));
     sortDir.addEventListener("change", () => loadProducts().catch((err) => showError(err.message)));
+
+    checkoutHint.addEventListener("click", () => {
+        if (!currentUser) {
+            openAuth(true);
+        }
+    });
+
+    authForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        showAuthError("");
+        loginBtn.disabled = true;
+        try {
+            const payload = {
+                login: loginInput.value.trim(),
+                password: passwordInput.value
+            };
+            const data = await api("/api/auth/login", {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+            await completeAuth(data);
+            passwordInput.value = "";
+        } catch (err) {
+            showAuthError(err.message);
+        } finally {
+            loginBtn.disabled = false;
+        }
+    });
+
+    registerBtn.addEventListener("click", async () => {
+        showAuthError("");
+        registerBtn.disabled = true;
+        try {
+            const payload = {
+                login: loginInput.value.trim(),
+                password: passwordInput.value
+            };
+            const data = await api("/api/auth/register", {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+            await completeAuth(data);
+            passwordInput.value = "";
+        } catch (err) {
+            showAuthError(err.message);
+        } finally {
+            registerBtn.disabled = false;
+        }
+    });
 
     checkoutBtn.addEventListener("click", async () => {
         try {
@@ -366,6 +456,7 @@
         clearToken();
         setAuthUi(null);
         loadProducts().catch((err) => showError(err.message));
+        openAuth(false);
     });
 
     async function init() {

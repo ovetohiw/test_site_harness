@@ -3,29 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aether — вход</title>
+    <title>Aether — каталог</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/catalog.css">
 </head>
-<body>
-<main class="stage">
-    <section class="panel" aria-labelledby="brand">
-        <p class="brand" id="brand">Aether</p>
-        <h1 class="headline" id="headline">Войдите в кабинет</h1>
-        <p class="lede" id="lede">Один аккаунт — доступ к каталогу и заказам. <a href="/catalog.html">Смотреть каталог</a> без входа.</p>
+<body class="catalog-page">
+<header class="topbar">
+    <a class="brand-link" href="/">Aether</a>
+    <nav class="topnav">
+        <button type="button" class="auth-toggle" id="auth-toggle" aria-expanded="false" aria-controls="auth-panel">
+            Вход
+        </button>
+        <button type="button" class="profile-toggle" id="profile-toggle" hidden aria-expanded="false" aria-controls="profile-panel">
+            <img class="profile-avatar" id="nav-avatar" src="/images/avatar-default.svg" alt="">
+            <span id="nav-login">Профиль</span>
+        </button>
+        <button type="button" class="cart-toggle" id="cart-toggle" aria-expanded="false" aria-controls="cart-panel">
+            Корзина <span class="cart-badge" id="cart-badge">0</span>
+        </button>
+    </nav>
+</header>
 
-        <div id="session-view" class="session hidden" aria-live="polite">
-            <p class="session-label">Вы вошли как</p>
-            <p class="session-login" id="session-login"></p>
-            <p class="session-note">Можно перейти в каталог — профиль и избранное доступны там.</p>
-            <div class="actions">
-                <a class="btn btn-primary" href="/catalog.html">Каталог</a>
-                <button type="button" class="btn btn-ghost" id="logout-btn">Выйти</button>
-            </div>
-        </div>
+<main class="catalog-main">
+    <section class="catalog-hero" aria-labelledby="catalog-brand">
+        <p class="brand" id="catalog-brand">Aether</p>
+        <h1 class="headline">Каталог ароматов</h1>
+        <p class="lede">Смотрите витрину без входа — войдите через кнопку в шапке, чтобы открыть профиль, избранное и оформление заказа.</p>
+    </section>
 
+    <div class="catalog-toolbar">
+        <label class="sort-field">
+            <span>Сортировка</span>
+            <select id="sort-field" aria-label="Поле сортировки">
+                <option value="name">По названию</option>
+                <option value="price">По цене</option>
+                <option value="brand">По бренду</option>
+            </select>
+        </label>
+        <label class="sort-field">
+            <span>Порядок</span>
+            <select id="sort-dir" aria-label="Порядок сортировки">
+                <option value="asc">По возрастанию</option>
+                <option value="desc">По убыванию</option>
+            </select>
+        </label>
+    </div>
+
+    <p class="error catalog-error" id="error" role="alert" hidden></p>
+    <section class="product-grid" id="product-grid" aria-live="polite"></section>
+</main>
+
+<aside class="auth-panel" id="auth-panel" aria-label="Вход" hidden>
+    <div class="auth-panel-inner">
+        <header class="auth-header">
+            <h2 id="auth-headline">Вход в профиль</h2>
+            <button type="button" class="btn btn-ghost" id="auth-close">Закрыть</button>
+        </header>
+        <p class="auth-lede" id="auth-lede">Один аккаунт — избранное, история покупок и оформление заказа.</p>
         <form id="auth-form" class="auth-form" novalidate>
             <label class="field">
                 <span>Логин</span>
@@ -35,14 +72,58 @@
                 <span>Пароль</span>
                 <input id="password" name="password" type="password" autocomplete="current-password" required minlength="6" maxlength="72">
             </label>
-            <p class="error" id="error" role="alert" hidden></p>
+            <p class="error" id="auth-error" role="alert" hidden></p>
             <div class="actions">
                 <button type="submit" class="btn btn-primary" id="login-btn">Войти</button>
                 <button type="button" class="btn btn-ghost" id="register-btn">Регистрация</button>
             </div>
         </form>
-    </section>
-</main>
-<script src="/js/auth.js" defer></script>
+    </div>
+</aside>
+
+<aside class="cart-panel" id="cart-panel" aria-label="Корзина" hidden>
+    <div class="cart-panel-inner">
+        <header class="cart-header">
+            <h2>Корзина</h2>
+            <button type="button" class="btn btn-ghost" id="cart-close">Закрыть</button>
+        </header>
+        <ul class="cart-list" id="cart-list"></ul>
+        <p class="cart-empty" id="cart-empty">Корзина пуста</p>
+        <footer class="cart-footer" id="cart-footer" hidden>
+            <p class="cart-total">Итого: <strong id="cart-total">0 ₽</strong></p>
+            <button type="button" class="btn btn-primary checkout-btn" id="checkout-btn" hidden>Оформить заказ</button>
+            <p class="cart-hint" id="checkout-hint">Войдите через шапку, чтобы оформить заказ и сохранить историю покупок.</p>
+        </footer>
+    </div>
+</aside>
+
+<aside class="profile-panel" id="profile-panel" aria-label="Профиль" hidden>
+    <div class="profile-panel-inner">
+        <header class="profile-header">
+            <h2>Профиль</h2>
+            <button type="button" class="btn btn-ghost" id="profile-close">Закрыть</button>
+        </header>
+        <div class="profile-card">
+            <img class="profile-avatar-lg" id="profile-avatar" src="/images/avatar-default.svg" alt="">
+            <div>
+                <p class="profile-login" id="profile-login"></p>
+                <p class="profile-meta" id="profile-meta"></p>
+            </div>
+        </div>
+        <section class="profile-section" aria-labelledby="favorites-title">
+            <h3 id="favorites-title">Избранное</h3>
+            <ul class="profile-list" id="favorites-list"></ul>
+            <p class="profile-empty" id="favorites-empty">Пока пусто — отметьте ароматы сердечком в каталоге.</p>
+        </section>
+        <section class="profile-section" aria-labelledby="orders-title">
+            <h3 id="orders-title">История покупок</h3>
+            <ul class="profile-list" id="orders-list"></ul>
+            <p class="profile-empty" id="orders-empty">Заказов ещё нет.</p>
+        </section>
+        <button type="button" class="btn btn-ghost logout-btn" id="logout-btn">Выйти из аккаунта</button>
+    </div>
+</aside>
+
+<script src="/js/catalog.js" defer></script>
 </body>
 </html>
