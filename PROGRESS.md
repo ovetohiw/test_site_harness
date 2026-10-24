@@ -26,7 +26,7 @@
   - docker crm-emulator healthy `:8090`; shop health UP
   - E2E register/favorite/checkout → 6 live SUCCESS + emulator eventCount=6
 - Зафиксированные доказательства: см. feature-list.json → task.evidence
-- Коммиты: (см. после commit)
+- Коммиты: `eea765f`
 - Обновлённые файлы или артефакты: crm-emulator/**, docker-compose.yml, feature-list.json, PROGRESS.md, docs/exec-plans/**
 - Известный риск или нерешённая проблема:
   - Эмулятор in-memory; порт 8090
