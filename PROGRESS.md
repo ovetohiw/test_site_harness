@@ -26,7 +26,7 @@
   - docker payment-emulator healthy `:8091`; shop health UP
   - E2E live → PENDING → succeed → refresh SUCCEEDED (eventCount=3)
 - Зафиксированные доказательства: см. feature-list.json → task.evidence
-- Коммиты: (pending)
+- Коммиты: `30148dd`
 - Обновлённые файлы или артефакты: src/**/payment/**, payment-emulator/**, docker-compose.yml, feature-list.json, PROGRESS.md, docs/exec-plans/**
 - Известный риск или нерешённая проблема:
   - Без YOOKASSA_SHOP_ID / SECRET_KEY — stub mode
