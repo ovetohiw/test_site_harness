@@ -45,6 +45,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/favorites", "/api/favorites/**").authenticated()
                         .requestMatchers("/api/orders", "/api/orders/**").authenticated()
                         .requestMatchers("/api/crm", "/api/crm/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/payments/webhook").permitAll()
+                        .requestMatchers("/api/payments", "/api/payments/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

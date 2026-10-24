@@ -29,6 +29,11 @@ services:
       BITRIX24_WEBHOOK_BASE_URL: ${BITRIX24_WEBHOOK_BASE_URL:-}
       AMOCRM_BASE_URL: ${AMOCRM_BASE_URL:-}
       AMOCRM_ACCESS_TOKEN: ${AMOCRM_ACCESS_TOKEN:-}
+      # When profile with-payment-emulator is active, point shop at payment emulator
+      YOOKASSA_BASE_URL: ${YOOKASSA_BASE_URL:-}
+      YOOKASSA_SHOP_ID: ${YOOKASSA_SHOP_ID:-}
+      YOOKASSA_SECRET_KEY: ${YOOKASSA_SECRET_KEY:-}
+      YOOKASSA_RETURN_URL: ${YOOKASSA_RETURN_URL:-http://localhost:8080/}
     depends_on:
       db:
         condition: service_healthy
@@ -53,6 +58,25 @@ services:
       - "8090:8090"
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost:8090/actuator/health | grep -q '\"status\":\"UP\"' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+
+  # Optional YooKassa emulator. Start with:
+  #   docker compose --profile with-payment-emulator up -d --build payment-emulator
+  # Wire the shop against it:
+  #   YOOKASSA_BASE_URL=http://payment-emulator:8091/v3
+  #   YOOKASSA_SHOP_ID=test-shop
+  #   YOOKASSA_SECRET_KEY=test-secret
+  payment-emulator:
+    profiles: ["with-payment-emulator"]
+    build: ./payment-emulator
+    container_name: perfume-shop-payment-emulator
+    ports:
+      - "8091:8091"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8091/actuator/health | grep -q '\"status\":\"UP\"' || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 12

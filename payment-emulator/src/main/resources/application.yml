@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: payment-emulator
+
+server:
+  port: 8091
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: when_authorized
+
+app:
+  emulator:
+    # Basic-auth credentials expected from shop (YOOKASSA_SHOP_ID / YOOKASSA_SECRET_KEY)
+    shop-id: ${YOOKASSA_EMULATOR_SHOP_ID:test-shop}
+    secret-key: ${YOOKASSA_EMULATOR_SECRET_KEY:test-secret}
+    # Public base used in confirmation_url
+    public-base-url: ${PAYMENT_EMULATOR_PUBLIC_BASE:http://localhost:8091}

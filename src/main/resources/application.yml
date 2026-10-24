@@ -46,3 +46,12 @@ app:
       # Account base URL + long-lived token; empty → stub mode
       base-url: ${AMOCRM_BASE_URL:}
       access-token: ${AMOCRM_ACCESS_TOKEN:}
+  payments:
+    yookassa:
+      enabled: true
+      # Point at payment-emulator for local tests: http://localhost:8091/v3
+      base-url: ${YOOKASSA_BASE_URL:https://api.yookassa.ru/v3}
+      # Empty shopId/secretKey → stub mode (local SUCCEEDED, no HTTP)
+      shop-id: ${YOOKASSA_SHOP_ID:}
+      secret-key: ${YOOKASSA_SECRET_KEY:}
+      return-url: ${YOOKASSA_RETURN_URL:http://localhost:8080/}

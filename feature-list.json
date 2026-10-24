@@ -17,24 +17,26 @@
       "id": "task",
       "priority": 1,
       "area": "Application",
-      "title": "Эмулятор для тестирования CRM",
-      "user_visible_behavior": "Создай эмулятор для тестирования CRM. Эмулятор должен быть на Java и должен использовать Spring Boot. Должна быть опциональная возможность развертывания в docker контейнере.",
+      "title": "Интеграция с платежной системой ЮKassa",
+      "user_visible_behavior": "Система платежей работает через ЮKassa. Необходимо реализовать интеграцию с ЮKassa. Также создать эмулятор для тестирования платежной системы.",
       "status": "passing",
       "verification": [
         "Тесты проходят успешно.",
         "Приложение корректно стартует и проходит health-check.",
+        "Система платежей работает корректно.",
         "Эмулятор функционирует корректно."
       ],
       "evidence": [
-        "mvnw.cmd test — shop 28/28 OK",
-        "mvnw.cmd -f crm-emulator/pom.xml test — 6/6 OK (CrmEmulatorTests + ShopClientContractTests)",
-        "docker compose --profile with-crm-emulator up -d --build crm-emulator — perfume-shop-crm-emulator healthy :8090",
-        "GET http://localhost:8090/actuator/health — UP; GET http://localhost:8080/actuator/health — UP",
-        "E2E live: BITRIX24/AMOCRM → emulator; register+favorite+checkout → 6 SUCCESS (ext ids 1..6), emulator eventCount=6",
-        "Optional Docker: profile with-crm-emulator; local: mvnw -f crm-emulator/pom.xml spring-boot:run",
-        "Exec plan: docs/exec-plans/complited/2026-10-24-crm-emulator.md"
+        "mvnw.cmd test — 34/34 OK (PaymentIntegrationTests + YooKassaClientTest)",
+        "mvnw.cmd -f payment-emulator/pom.xml test — 4/4 OK",
+        "docker compose --profile with-payment-emulator up -d --build — payment-emulator healthy :8091; app healthy :8080",
+        "GET /actuator/health shop+emulator — UP",
+        "Stub: checkout → paymentStatus=SUCCEEDED (без credentials)",
+        "E2E live: YOOKASSA_* → emulator; checkout PENDING + confirmationUrl; POST /emulator/payments/{id}/succeed; refresh → SUCCEEDED; emulator paymentCount=1 eventCount=3",
+        "API: GET /api/payments/status, GET /api/payments, POST /api/payments/{id}/refresh, POST /api/payments/webhook",
+        "Exec plan: docs/exec-plans/complited/2026-10-24-yookassa-payments.md"
       ],
-      "notes": "crm-emulator/: Bitrix24 webhook + amoCRM v4; inspect /emulator/events; token test-token"
+      "notes": "Без YOOKASSA_SHOP_ID/SECRET_KEY — stub mode. Эмулятор опционален (profile with-payment-emulator, порт 8091)."
     }
   ]
 }

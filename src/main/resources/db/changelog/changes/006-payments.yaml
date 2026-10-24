@@ -1,0 +1,100 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-add-order-payment-status
+      author: perfume-shop
+      comment: Payment status on orders (pending until YooKassa succeeds)
+      changes:
+        - addColumn:
+            tableName: orders
+            columns:
+              - column:
+                  name: payment_status
+                  type: VARCHAR(32)
+                  defaultValue: SUCCEEDED
+                  constraints:
+                    nullable: false
+      rollback:
+        - dropColumn:
+            tableName: orders
+            columnName: payment_status
+
+  - changeSet:
+      id: 006-create-payments
+      author: perfume-shop
+      comment: YooKassa payment records linked to orders
+      changes:
+        - createTable:
+            tableName: payments
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: order_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: external_id
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: status
+                  type: VARCHAR(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: NUMERIC(12, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency
+                  type: VARCHAR(3)
+                  defaultValue: RUB
+                  constraints:
+                    nullable: false
+              - column:
+                  name: confirmation_url
+                  type: VARCHAR(1024)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - addForeignKeyConstraint:
+            constraintName: fk_payments_order
+            baseTableName: payments
+            baseColumnNames: order_id
+            referencedTableName: orders
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - createIndex:
+            indexName: idx_payments_external_id
+            tableName: payments
+            columns:
+              - column:
+                  name: external_id
+      rollback:
+        - dropTable:
+            tableName: payments

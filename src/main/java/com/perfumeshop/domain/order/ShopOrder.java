@@ -1,9 +1,12 @@
 package com.perfumeshop.domain.order;
 
 import com.perfumeshop.domain.user.User;
+import com.perfumeshop.payment.PaymentStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,6 +36,10 @@ public class ShopOrder {
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal total;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_status", nullable = false, length = 32)
+    private PaymentStatus paymentStatus = PaymentStatus.PENDING;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
 
@@ -45,6 +52,7 @@ public class ShopOrder {
     public ShopOrder(User user, BigDecimal total) {
         this.user = user;
         this.total = total;
+        this.paymentStatus = PaymentStatus.PENDING;
     }
 
     public Long getId() {
@@ -57,6 +65,14 @@ public class ShopOrder {
 
     public BigDecimal getTotal() {
         return total;
+    }
+
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 
     public Instant getCreatedAt() {
@@ -72,3 +88,4 @@ public class ShopOrder {
         item.setOrder(this);
     }
 }
+

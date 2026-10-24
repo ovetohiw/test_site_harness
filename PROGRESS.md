@@ -10,6 +10,30 @@
 
 ## Лог сессий
 
+### Сессия 011
+
+- Дата: 2026-10-24
+- Цель: task — ЮKassa payments + payment emulator
+- Сделано:
+  - Клиент ЮKassa API v3 + stub; таблица `payments`, `orders.payment_status`
+  - Checkout создаёт платёж; CRM sale после SUCCEEDED; webhook + refresh
+  - UI: статус оплаты / ссылка «Оплатить»
+  - `payment-emulator/` (порт 8091) + compose profile `with-payment-emulator`
+  - Exec plan: docs/exec-plans/complited/2026-10-24-yookassa-payments.md
+- Запущенная верификация:
+  - `.\mvnw.cmd test` — shop 34/34 OK
+  - `.\mvnw.cmd -f payment-emulator/pom.xml test` — 4/4 OK
+  - docker payment-emulator healthy `:8091`; shop health UP
+  - E2E live → PENDING → succeed → refresh SUCCEEDED (eventCount=3)
+- Зафиксированные доказательства: см. feature-list.json → task.evidence
+- Коммиты: (pending)
+- Обновлённые файлы или артефакты: src/**/payment/**, payment-emulator/**, docker-compose.yml, feature-list.json, PROGRESS.md, docs/exec-plans/**
+- Известный риск или нерешённая проблема:
+  - Без YOOKASSA_SHOP_ID / SECRET_KEY — stub mode
+  - Эмулятор in-memory; порт 8091; без profile не стартует
+  - Корзина не привязана к JWT (только X-Cart-Id)
+- Следующий лучший шаг: следующая фича в feature-list.json
+
 ### Сессия 010
 
 - Дата: 2026-10-24

@@ -4,11 +4,13 @@ import com.perfumeshop.domain.cart.Cart;
 import com.perfumeshop.domain.cart.CartItem;
 import com.perfumeshop.domain.order.OrderItem;
 import com.perfumeshop.domain.order.ShopOrder;
+import com.perfumeshop.domain.payment.Payment;
 import com.perfumeshop.domain.product.Product;
 import com.perfumeshop.domain.user.User;
 import com.perfumeshop.dto.catalog.OrderResponse;
 import com.perfumeshop.repository.CartRepository;
 import com.perfumeshop.repository.OrderRepository;
+import com.perfumeshop.repository.PaymentRepository;
 import com.perfumeshop.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,25 +27,31 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
-    private final CrmService crmService;
+    private final PaymentRepository paymentRepository;
+    private final PaymentService paymentService;
 
     public OrderService(
             OrderRepository orderRepository,
             CartRepository cartRepository,
             UserRepository userRepository,
-            CrmService crmService
+            PaymentRepository paymentRepository,
+            PaymentService paymentService
     ) {
         this.orderRepository = orderRepository;
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
-        this.crmService = crmService;
+        this.paymentRepository = paymentRepository;
+        this.paymentService = paymentService;
     }
 
     @Transactional(readOnly = true)
     public List<OrderResponse> list(String login) {
         User user = requireUser(login);
         return orderRepository.findByUser_IdOrderByCreatedAtDesc(user.getId()).stream()
-                .map(OrderResponse::from)
+                .map(order -> OrderResponse.from(
+                        order,
+                        paymentRepository.findByOrder_Id(order.getId()).orElse(null)
+                ))
                 .toList();
     }
 
@@ -70,9 +78,9 @@ public class OrderService {
         ShopOrder saved = orderRepository.save(order);
         cart.getItems().clear();
         cartRepository.save(cart);
-        crmService.onSaleCompleted(saved);
 
-        return OrderResponse.from(saved);
+        Payment payment = paymentService.createForOrder(saved);
+        return OrderResponse.from(saved, payment);
     }
 
     private User requireUser(String login) {

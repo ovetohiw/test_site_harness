@@ -266,11 +266,19 @@
             const lines = (order.items || [])
                 .map((item) => `${escapeHtml(item.productName)} × ${item.quantity}`)
                 .join(", ");
+            const pay = order.paymentStatus || "PENDING";
+            const payLabel = pay === "SUCCEEDED" ? "оплачен"
+                : pay === "CANCELED" ? "отменён"
+                    : "ожидает оплаты";
+            const payLink = order.confirmationUrl
+                ? `<a class="pay-link" href="${escapeHtml(order.confirmationUrl)}" target="_blank" rel="noopener">Оплатить</a>`
+                : "";
             return `
             <li class="profile-item profile-order">
                 <div>
                     <p class="profile-item-title">Заказ от ${formatDate(order.createdAt)}</p>
                     <p class="profile-item-meta">${lines}</p>
+                    <p class="profile-item-meta">Оплата: ${payLabel} ${payLink}</p>
                 </div>
                 <strong>${formatPrice(order.total)}</strong>
             </li>`;
@@ -463,7 +471,10 @@
     checkoutBtn.addEventListener("click", async () => {
         try {
             showError("");
-            await api("/api/orders/checkout", { method: "POST" });
+            const order = await api("/api/orders/checkout", { method: "POST" });
+            if (order && order.confirmationUrl) {
+                window.open(order.confirmationUrl, "_blank", "noopener");
+            }
             const cart = await api("/api/cart");
             renderCart(cart);
             await loadProfileData();
