@@ -28,6 +28,7 @@
   - `spring-boot:run` + `/actuator/health` — UP
   - register → me → index.html smoke — OK; `expiresInMs=3600000`
 - Зафиксированные доказательства: см. `feature-list.json` → task.evidence
+- Коммиты: `c11b1f8` Add login/register with JWT session persistence (1h TTL).
 - Обновлённые файлы или артефакты: `pom.xml`, `src/**`, `feature-list.json`, `PROGRESS.md`, `docs/exec-plans/**`, `.mvn/wrapper/maven-wrapper.properties`
 - Известный риск или нерешённая проблема:
   - Dev JWT secret захардкожен в `application.yml` (не для prod)
