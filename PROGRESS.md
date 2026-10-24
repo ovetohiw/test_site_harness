@@ -26,7 +26,7 @@
   - `mvnw.cmd test` — 22/22 OK
   - sort/favorites/checkout smoke — OK
 - Зафиксированные доказательства: см. `feature-list.json` → task.evidence
-- Коммиты: (pending)
+- Коммиты: `87f81e3` Add catalog sorting, quantity, and authenticated profile.
 - Обновлённые файлы или артефакты: `src/**`, `feature-list.json`, `PROGRESS.md`, `docs/exec-plans/**`
 - Известный риск или нерешённая проблема:
   - Корзина не привязана к JWT (только `X-Cart-Id`)
