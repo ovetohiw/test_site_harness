@@ -10,6 +10,28 @@
 
 ## Лог сессий
 
+### Сессия 008
+
+- Дата: 2026-10-24
+- Цель: task — убрать guest lede с главной
+- Сделано:
+  - Удалён `<p class="lede">…</p>` из `index.html` (каталог-hero)
+  - Assert в `CatalogProfileTests.homePageHasNoTechnicalTokenCopy`
+  - Exec plan: `docs/exec-plans/complited/2026-10-24-remove-guest-lede.md`
+- Запущенная верификация:
+  - `docker compose up -d --build` — OK; app+db healthy на `:8080`
+  - `GET /actuator/health` — UP
+  - `mvnw.cmd test` — 23/23 OK
+  - Smoke: `GET /` без «Смотрите витрину без входа» — OK
+- Зафиксированные доказательства: см. `feature-list.json` → task.evidence
+- Коммиты: (pending)
+- Обновлённые файлы или артефакты: `index.html`, `CatalogProfileTests.java`, `feature-list.json`, `PROGRESS.md`, `docs/exec-plans/**`
+- Известный риск или нерешённая проблема:
+  - Корзина не привязана к JWT (только `X-Cart-Id`)
+  - Порт 8080: конфликт локального run и docker `app`
+- Следующий лучший шаг: следующая фича в `feature-list.json`
+
+
 ### Сессия 007
 
 - Дата: 2026-10-24

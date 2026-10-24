@@ -178,6 +178,7 @@ class CatalogProfileTests {
         assertThat(response.getBody()).doesNotContain("Токен");
         assertThat(response.getBody()).doesNotContain("JWT");
         assertThat(response.getBody()).doesNotContain("expiresInMs");
+        assertThat(response.getBody()).doesNotContain("Смотрите витрину без входа");
     }
 
     @Test

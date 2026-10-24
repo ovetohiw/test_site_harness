@@ -18,7 +18,7 @@
       "priority": 1,
       "area": "Application",
       "title": "Исправление багов",
-      "user_visible_behavior": "1) При выходе из учетной записи не должна оставаться табличка с профилем, должна быть только кнопка входа. 2) При добавлении товара в избранное страница не должна обновляться. 3) url не должен содержать названия html страницы, должен быть апи адрес",
+      "user_visible_behavior": "Убери надпись \"Смотрите витрину без входа — войдите через кнопку в шапке, чтобы открыть профиль, избранное и оформление заказа.\"",
       "status": "passing",
       "verification": [
         "Тесты проходят успешно.",
@@ -29,11 +29,12 @@
         "mvnw.cmd test — 23/23 OK (2026-10-24)",
         "docker compose up -d --build — app+db healthy on :8080",
         "GET /actuator/health — UP",
-        "Smoke: GET / → 200; GET /index.html → 302 Location:/; GET /catalog.html → 302 Location:/",
-        "catalog.js: syncFavoriteButtons + clearProfileUi; auth.css: [hidden]{display:none!important}",
-        "Exec plan: docs/exec-plans/complited/2026-10-24-bugfixes.md"
+        "Smoke: GET / → 200; body does not contain «Смотрите витрину без входа»; headline «Каталог ароматов» present",
+        "index.html: removed catalog-hero .lede guest copy",
+        "CatalogProfileTests.homePageHasNoTechnicalTokenCopy asserts text absent",
+        "Exec plan: docs/exec-plans/complited/2026-10-24-remove-guest-lede.md"
       ],
-      "notes": "Logout: [hidden] CSS fix; favorites: in-place button sync; clean URLs via redirect filter/controller"
+      "notes": "Removed guest lede paragraph from home catalog hero"
     }
   ]
 }
