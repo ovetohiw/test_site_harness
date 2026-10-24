@@ -26,7 +26,7 @@
   - `mvnw.cmd test` — 15/15 OK
   - anonymous products + cart add/remove + `/catalog.html` 200 — OK
 - Зафиксированные доказательства: см. `feature-list.json` → task.evidence
-- Коммиты: (см. после commit)
+- Коммиты: `5453bc4` Add anonymous product catalog and cart (X-Cart-Id).
 - Обновлённые файлы или артефакты: `src/**`, `feature-list.json`, `PROGRESS.md`, `docs/exec-plans/**`
 - Известный риск или нерешённая проблема:
   - Docker Desktop может зависать при image build — требуется перезапуск
