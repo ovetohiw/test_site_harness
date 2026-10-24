@@ -24,7 +24,7 @@
   - `GET /actuator/health` — UP
   - `mvnw.cmd test` — 10/10 OK
 - Зафиксированные доказательства: см. `feature-list.json` → task.evidence
-- Коммиты: (см. следующий commit после этой сессии)
+- Коммиты: `2816330` Add Dockerized Spring Boot app service on port 8080.
 - Обновлённые файлы или артефакты: `Dockerfile`, `.dockerignore`, `docker-compose.yml`, `feature-list.json`, `PROGRESS.md`, `docs/exec-plans/**`
 - Известный риск или нерешённая проблема:
   - Первый image build долгий (скачивание Maven deps)
