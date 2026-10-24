@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: perfume-shop
+  datasource:
+    url: jdbc:postgresql://localhost:5432/perfume_shop
+    username: perfume
+    password: perfume
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: when_authorized
+
+server:
+  port: 8080

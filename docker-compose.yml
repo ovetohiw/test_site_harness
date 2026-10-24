@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: perfume-shop-db
+    environment:
+      POSTGRES_DB: perfume_shop
+      POSTGRES_USER: perfume
+      POSTGRES_PASSWORD: perfume
+    ports:
+      - "5432:5432"
+    volumes:
+      - perfume_shop_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U perfume -d perfume_shop"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  perfume_shop_pgdata:
