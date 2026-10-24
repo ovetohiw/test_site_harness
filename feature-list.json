@@ -1,0 +1,33 @@
+{
+    "project": "replace-with-project-name",
+    "last_updated": "YYYY-MM-DD",
+    "rules": {
+      "single_active_feature": true,
+      "passing_requires_evidence": true,
+      "do_not_skip_verification": true
+    },
+    "status_legend": {
+      "not_started": "Work has not begun.",
+      "in_progress": "The feature is the current active task.",
+      "blocked": "Work cannot continue until a documented blocker is resolved.",
+      "passing": "Required verification has passed and evidence is recorded."
+    },
+    "features": [
+      {
+        "id": "task-001",
+        "priority": 1,
+        "area": "Application",
+        "title": "Создайние базы данных, change log, docker-compose",
+        "user_visible_behavior": "База данных разворачивается, changelog и docker-compose файлы созданы.",
+        "status": "not_started",
+        "verification": [
+          "Запусти приложение.",
+          "Запусти docker-compose.",
+          "Создай тестовый change файл для базы данных.",
+          "Проверь что все работает и откати изменения в changelog."
+        ],
+        "evidence": [],
+        "notes": ""
+      }
+    ]
+  }
