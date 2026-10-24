@@ -25,7 +25,7 @@
   - `mvnw.cmd test` — 23/23 OK
   - Smoke redirects + static JS/CSS — OK
 - Зафиксированные доказательства: см. `feature-list.json` → task.evidence
-- Коммиты: (pending)
+- Коммиты: `4687adb`
 - Обновлённые файлы или артефакты: `src/**`, tests, `feature-list.json`, `PROGRESS.md`, `docs/exec-plans/**`
 - Известный риск или нерешённая проблема:
   - Корзина не привязана к JWT (только `X-Cart-Id`)
