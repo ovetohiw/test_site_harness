@@ -25,7 +25,7 @@
   - `mvnw.cmd test` — 22/22 OK
   - Smoke: `/` product-grid+auth-panel; `/catalog.html` redirect — OK
 - Зафиксированные доказательства: см. `feature-list.json` → task.evidence
-- Коммиты: (pending)
+- Коммиты: `2730469` Make catalog the home page with in-page login.
 - Обновлённые файлы или артефакты: `src/main/resources/static/**`, tests, `feature-list.json`, `PROGRESS.md`, `docs/exec-plans/**`
 - Известный риск или нерешённая проблема:
   - Корзина не привязана к JWT (только `X-Cart-Id`)
