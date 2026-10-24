@@ -26,7 +26,7 @@
   - `spring-boot:run` + `/actuator/health` — UP
   - `mvn liquibase:rollback -Dliquibase.rollbackCount=1` — OK
 - Зафиксированные доказательства: см. `feature-list.json` → task-001.evidence
-- Коммиты: начальный коммит task-001
+- Коммиты: `6fb581b` Add Spring Boot baseline with PostgreSQL, Liquibase, and docker-compose (task-001).
 - Обновлённые файлы или артефакты: `pom.xml`, `docker-compose.yml`, `src/**`, `mvnw*`, `.mvn/**`, `feature-list.json`, `PROGRESS.md`
 - Известный риск или нерешённая проблема:
   - Docker Desktop должен быть запущен до `docker compose up`
