@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/changes/001-baseline.yaml
   - include:
       file: db/changelog/changes/002-users.yaml
+  - include:
+      file: db/changelog/changes/003-products-cart.yaml

@@ -14,13 +14,16 @@
     <section class="panel" aria-labelledby="brand">
         <p class="brand" id="brand">Aether</p>
         <h1 class="headline" id="headline">Войдите в кабинет</h1>
-        <p class="lede" id="lede">Один аккаунт — доступ к каталогу и заказам.</p>
+        <p class="lede" id="lede">Один аккаунт — доступ к каталогу и заказам. <a href="/catalog.html">Смотреть каталог</a> без входа.</p>
 
         <div id="session-view" class="session hidden" aria-live="polite">
             <p class="session-label">Вы вошли как</p>
             <p class="session-login" id="session-login"></p>
             <p class="session-note">Сессия сохраняется при обновлении страницы. Токен действует 1 час.</p>
-            <button type="button" class="btn btn-ghost" id="logout-btn">Выйти</button>
+            <div class="actions">
+                <a class="btn btn-primary" href="/catalog.html">Каталог</a>
+                <button type="button" class="btn btn-ghost" id="logout-btn">Выйти</button>
+            </div>
         </div>
 
         <form id="auth-form" class="auth-form" novalidate>

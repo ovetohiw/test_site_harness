@@ -10,6 +10,30 @@
 
 ## Лог сессий
 
+### Сессия 004
+
+- Дата: 2026-10-24
+- Цель: task — страница товаров и корзина (анонимный доступ)
+- Сделано:
+  - Liquibase `003-products-cart.yaml` (products + seed, carts, cart_items)
+  - API: `GET /api/products`, `GET /api/cart`, `POST /api/cart/items`, `DELETE /api/cart/items/{productId}`
+  - UI: `/catalog.html` + CSS/JS; корзина по `X-Cart-Id` в localStorage
+  - `CatalogCartTests` (5) + baseline (10) = 15
+  - Exec plan: `docs/exec-plans/complited/2026-10-24-products-cart.md`
+- Запущенная верификация:
+  - `docker compose up -d --build` — OK; app+db healthy на `:8080`
+  - `GET /actuator/health` — UP
+  - `mvnw.cmd test` — 15/15 OK
+  - anonymous products + cart add/remove + `/catalog.html` 200 — OK
+- Зафиксированные доказательства: см. `feature-list.json` → task.evidence
+- Коммиты: (см. после commit)
+- Обновлённые файлы или артефакты: `src/**`, `feature-list.json`, `PROGRESS.md`, `docs/exec-plans/**`
+- Известный риск или нерешённая проблема:
+  - Docker Desktop может зависать при image build — требуется перезапуск
+  - Корзина не привязана к JWT-пользователю (только `X-Cart-Id`)
+  - Порт 8080: конфликт локального run и docker `app`
+- Следующий лучший шаг: следующая фича в `feature-list.json`
+
 ### Сессия 003
 
 - Дата: 2026-10-24

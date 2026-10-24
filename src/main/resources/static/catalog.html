@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aether — каталог</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/catalog.css">
+</head>
+<body class="catalog-page">
+<header class="topbar">
+    <a class="brand-link" href="/catalog.html">Aether</a>
+    <nav class="topnav">
+        <a href="/">Вход</a>
+        <button type="button" class="cart-toggle" id="cart-toggle" aria-expanded="false" aria-controls="cart-panel">
+            Корзина <span class="cart-badge" id="cart-badge">0</span>
+        </button>
+    </nav>
+</header>
+
+<main class="catalog-main">
+    <section class="catalog-hero" aria-labelledby="catalog-brand">
+        <p class="brand" id="catalog-brand">Aether</p>
+        <h1 class="headline">Каталог ароматов</h1>
+        <p class="lede">Смотрите витрину без входа — добавьте понравившиеся флаконы в корзину.</p>
+    </section>
+
+    <p class="error catalog-error" id="error" role="alert" hidden></p>
+    <section class="product-grid" id="product-grid" aria-live="polite"></section>
+</main>
+
+<aside class="cart-panel" id="cart-panel" aria-label="Корзина" hidden>
+    <div class="cart-panel-inner">
+        <header class="cart-header">
+            <h2>Корзина</h2>
+            <button type="button" class="btn btn-ghost" id="cart-close">Закрыть</button>
+        </header>
+        <ul class="cart-list" id="cart-list"></ul>
+        <p class="cart-empty" id="cart-empty">Корзина пуста</p>
+        <footer class="cart-footer" id="cart-footer" hidden>
+            <p class="cart-total">Итого: <strong id="cart-total">0 ₽</strong></p>
+        </footer>
+    </div>
+</aside>
+
+<script src="/js/catalog.js" defer></script>
+</body>
+</html>

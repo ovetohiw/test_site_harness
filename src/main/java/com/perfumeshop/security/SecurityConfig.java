@@ -35,7 +35,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login").permitAll()
-                        .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/favicon.ico").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/products").permitAll()
+                        .requestMatchers("/api/cart", "/api/cart/**").permitAll()
+                        .requestMatchers(
+                                "/", "/index.html", "/catalog.html",
+                                "/css/**", "/js/**", "/images/**", "/favicon.ico"
+                        ).permitAll()
                         .requestMatchers("/api/auth/me").authenticated()
                         .anyRequest().authenticated()
                 )
