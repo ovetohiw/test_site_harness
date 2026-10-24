@@ -1,0 +1,14 @@
+target/
+.git/
+.idea/
+.vscode/
+*.iml
+*.log
+docs/
+PROGRESS.md
+PLANS.md
+AGENTS.md
+ARCHITECTURE.md
+feature-list.json
+README.md
+**/.DS_Store

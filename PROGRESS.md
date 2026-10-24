@@ -3,12 +3,34 @@
 ## Текущее проверенное состояние
 
 - Корень репозитория: `d:\apps\test_site_harness`
-- Стандартный путь старта: `docker compose up -d` затем `mvnw.cmd spring-boot:run`
+- Стандартный путь старта: `docker compose up -d --build` (app + db) **или** `docker compose up -d` (только db) + `mvnw.cmd spring-boot:run`
 - Стандартный путь верификации: `mvnw.cmd test` + `GET http://localhost:8080/actuator/health`
 - Текущая незавершённая фича с наивысшим приоритетом: нет (`task` = passing)
 - Текущий блокер: нет
 
 ## Лог сессий
+
+### Сессия 003
+
+- Дата: 2026-10-24
+- Цель: task — приложение разворачивается в контейнере Docker на порте 8080
+- Сделано:
+  - `Dockerfile` (multi-stage: `maven:3.9.9-eclipse-temurin-17-alpine` → `eclipse-temurin:17-jre-alpine`)
+  - `.dockerignore`
+  - Сервис `app` в `docker-compose.yml` (8080, depends_on healthy `db`, env datasource → `db:5432`)
+  - Exec plan: `docs/exec-plans/complited/2026-10-24-app-in-docker.md`
+- Запущенная верификация:
+  - `docker compose up -d --build` — OK; `perfume-shop-app` healthy на `:8080`
+  - `GET /actuator/health` — UP
+  - `mvnw.cmd test` — 10/10 OK
+- Зафиксированные доказательства: см. `feature-list.json` → task.evidence
+- Коммиты: (см. следующий commit после этой сессии)
+- Обновлённые файлы или артефакты: `Dockerfile`, `.dockerignore`, `docker-compose.yml`, `feature-list.json`, `PROGRESS.md`, `docs/exec-plans/**`
+- Известный риск или нерешённая проблема:
+  - Первый image build долгий (скачивание Maven deps)
+  - Порт 8080: конфликт если одновременно локальный `spring-boot:run` и docker `app`
+  - Dev credentials БД / JWT secret по-прежнему в compose / yml
+- Следующий лучший шаг: следующая фича в `feature-list.json` (каталог/товары)
 
 ### Сессия 002
 
@@ -21,7 +43,7 @@
   - UI: `static/index.html` + CSS/JS, токен в `localStorage`
   - `AuthFlowTests` (7) + baseline tests (3)
   - Исправлен битый `distributionUrl` Maven Wrapper → Apache Maven 3.9.9
-  - Exec plan: `docs/exec-plans/active/2026-10-24-login-auth.md` → completed
+  - Exec plan: `docs/exec-plans/complited/2026-10-24-login-auth.md` → completed
 - Запущенная верификация:
   - `docker compose up -d` — OK (container уже Running)
   - `mvnw.cmd test` — 10/10 OK

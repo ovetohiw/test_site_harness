@@ -16,5 +16,24 @@ services:
       timeout: 5s
       retries: 10
 
+  app:
+    build: .
+    container_name: perfume-shop-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/perfume_shop
+      SPRING_DATASOURCE_USERNAME: perfume
+      SPRING_DATASOURCE_PASSWORD: perfume
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/actuator/health | grep -q '\"status\":\"UP\"' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+
 volumes:
   perfume_shop_pgdata:
