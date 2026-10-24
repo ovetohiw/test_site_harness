@@ -24,7 +24,7 @@
   - `mvnw.cmd test` — 23/23 OK
   - Smoke: `GET /` без «Смотрите витрину без входа» — OK
 - Зафиксированные доказательства: см. `feature-list.json` → task.evidence
-- Коммиты: (pending)
+- Коммиты: `de37356`
 - Обновлённые файлы или артефакты: `index.html`, `CatalogProfileTests.java`, `feature-list.json`, `PROGRESS.md`, `docs/exec-plans/**`
 - Известный риск или нерешённая проблема:
   - Корзина не привязана к JWT (только `X-Cart-Id`)
