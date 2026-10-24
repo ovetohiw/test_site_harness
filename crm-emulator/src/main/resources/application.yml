@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: crm-emulator
+
+server:
+  port: 8090
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: when_authorized
+
+app:
+  emulator:
+    # Token expected by amoCRM Bearer auth (shop: AMOCRM_ACCESS_TOKEN)
+    amocrm-access-token: ${AMOCRM_EMULATOR_TOKEN:test-token}

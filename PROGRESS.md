@@ -10,6 +10,30 @@
 
 ## Лог сессий
 
+### Сессия 010
+
+- Дата: 2026-10-24
+- Цель: task — CRM emulator (Spring Boot + optional Docker)
+- Сделано:
+  - Отдельное приложение `crm-emulator/` (порт 8090): Bitrix24 webhook + amoCRM API v4
+  - Inspect API `/emulator/events`, `/emulator/status`; actuator health
+  - Docker: `crm-emulator/Dockerfile` + compose profile `with-crm-emulator`
+  - Тесты эмулятора 6/6; E2E shop→emulator live SUCCESS
+  - Exec plan: docs/exec-plans/complited/2026-10-24-crm-emulator.md
+- Запущенная верификация:
+  - `.\mvnw.cmd test` — shop 28/28 OK
+  - `.\mvnw.cmd -f crm-emulator/pom.xml test` — 6/6 OK
+  - docker crm-emulator healthy `:8090`; shop health UP
+  - E2E register/favorite/checkout → 6 live SUCCESS + emulator eventCount=6
+- Зафиксированные доказательства: см. feature-list.json → task.evidence
+- Коммиты: (см. после commit)
+- Обновлённые файлы или артефакты: crm-emulator/**, docker-compose.yml, feature-list.json, PROGRESS.md, docs/exec-plans/**
+- Известный риск или нерешённая проблема:
+  - Эмулятор in-memory; порт 8090
+  - Без profile `with-crm-emulator` контейнер не стартует (опционально)
+  - Корзина не привязана к JWT (только X-Cart-Id)
+- Следующий лучший шаг: следующая фича в feature-list.json
+
 ### Сессия 009
 
 - Дата: 2026-10-24

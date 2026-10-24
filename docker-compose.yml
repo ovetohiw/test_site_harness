@@ -25,6 +25,10 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/perfume_shop
       SPRING_DATASOURCE_USERNAME: perfume
       SPRING_DATASOURCE_PASSWORD: perfume
+      # When profile with-crm-emulator is active, point shop CRM clients at the emulator
+      BITRIX24_WEBHOOK_BASE_URL: ${BITRIX24_WEBHOOK_BASE_URL:-}
+      AMOCRM_BASE_URL: ${AMOCRM_BASE_URL:-}
+      AMOCRM_ACCESS_TOKEN: ${AMOCRM_ACCESS_TOKEN:-}
     depends_on:
       db:
         condition: service_healthy
@@ -34,6 +38,25 @@ services:
       timeout: 5s
       retries: 12
       start_period: 60s
+
+  # Optional CRM emulator (Bitrix24 + amoCRM). Start with:
+  #   docker compose --profile with-crm-emulator up -d --build crm-emulator
+  # Wire the shop against it (same compose network):
+  #   BITRIX24_WEBHOOK_BASE_URL=http://crm-emulator:8090/rest/1/test/
+  #   AMOCRM_BASE_URL=http://crm-emulator:8090
+  #   AMOCRM_ACCESS_TOKEN=test-token
+  crm-emulator:
+    profiles: ["with-crm-emulator"]
+    build: ./crm-emulator
+    container_name: perfume-shop-crm-emulator
+    ports:
+      - "8090:8090"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8090/actuator/health | grep -q '\"status\":\"UP\"' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
 
 volumes:
   perfume_shop_pgdata:
