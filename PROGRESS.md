@@ -26,7 +26,7 @@
   - mvnw.cmd test — 28/28 OK
   - Smoke: register/favorite/checkout → 6 SUCCESS (BITRIX24+AMOCRM)
 - Зафиксированные доказательства: см. feature-list.json → task.evidence
-- Коммиты: (pending)
+- Коммиты: `3a3d2b5`
 - Обновлённые файлы или артефакты: src/**/crm/**, services, tests, feature-list.json, PROGRESS.md, docs/exec-plans/**
 - Известный риск или нерешённая проблема:
   - Без BITRIX24_WEBHOOK_BASE_URL / AMOCRM_* — stub mode
