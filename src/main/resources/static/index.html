@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aether — вход</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+<main class="stage">
+    <section class="panel" aria-labelledby="brand">
+        <p class="brand" id="brand">Aether</p>
+        <h1 class="headline" id="headline">Войдите в кабинет</h1>
+        <p class="lede" id="lede">Один аккаунт — доступ к каталогу и заказам.</p>
+
+        <div id="session-view" class="session hidden" aria-live="polite">
+            <p class="session-label">Вы вошли как</p>
+            <p class="session-login" id="session-login"></p>
+            <p class="session-note">Сессия сохраняется при обновлении страницы. Токен действует 1 час.</p>
+            <button type="button" class="btn btn-ghost" id="logout-btn">Выйти</button>
+        </div>
+
+        <form id="auth-form" class="auth-form" novalidate>
+            <label class="field">
+                <span>Логин</span>
+                <input id="login" name="login" type="text" autocomplete="username" required minlength="3" maxlength="64">
+            </label>
+            <label class="field">
+                <span>Пароль</span>
+                <input id="password" name="password" type="password" autocomplete="current-password" required minlength="6" maxlength="72">
+            </label>
+            <p class="error" id="error" role="alert" hidden></p>
+            <div class="actions">
+                <button type="submit" class="btn btn-primary" id="login-btn">Войти</button>
+                <button type="button" class="btn btn-ghost" id="register-btn">Регистрация</button>
+            </div>
+        </form>
+    </section>
+</main>
+<script src="/js/auth.js" defer></script>
+</body>
+</html>

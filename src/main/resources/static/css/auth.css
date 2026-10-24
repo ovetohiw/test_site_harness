@@ -1,0 +1,217 @@
+:root {
+    --ink: #1a2420;
+    --muted: #5c6b63;
+    --paper: #f3efe6;
+    --panel: rgba(255, 252, 247, 0.88);
+    --line: rgba(26, 36, 32, 0.12);
+    --accent: #2f5d4a;
+    --accent-deep: #1f3f33;
+    --danger: #8b3a3a;
+    --radius: 2px;
+    --shadow: 0 24px 60px rgba(20, 28, 24, 0.18);
+    --font-display: "Cormorant Garamond", Georgia, serif;
+    --font-body: "Outfit", "Segoe UI", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--ink);
+    background:
+        radial-gradient(ellipse 80% 60% at 15% 20%, rgba(47, 93, 74, 0.22), transparent 55%),
+        radial-gradient(ellipse 70% 50% at 90% 80%, rgba(140, 110, 70, 0.18), transparent 50%),
+        linear-gradient(160deg, #e8e2d4 0%, #d7e0d8 45%, #c9d4cc 100%);
+    background-attachment: fixed;
+}
+
+.stage {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 2rem 1.25rem;
+}
+
+.panel {
+    width: min(100%, 420px);
+    padding: 2.5rem 2rem 2.25rem;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+    animation: rise 0.7s ease both;
+}
+
+.brand {
+    margin: 0 0 1.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 8vw, 3.4rem);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: var(--accent-deep);
+    animation: fade-in 0.9s ease 0.1s both;
+}
+
+.headline {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-display);
+    font-size: 1.55rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+.lede,
+.session-note {
+    margin: 0 0 1.75rem;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.5;
+}
+
+.auth-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.field {
+    display: grid;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.field input {
+    width: 100%;
+    padding: 0.85rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--ink);
+    font: 400 1rem var(--font-body);
+    text-transform: none;
+    letter-spacing: normal;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.field input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #fff;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.btn {
+    appearance: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    padding: 0.8rem 1.2rem;
+    font: 500 0.95rem var(--font-body);
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: #f7f4ee;
+}
+
+.btn-primary:hover {
+    background: var(--accent-deep);
+}
+
+.btn-ghost {
+    background: transparent;
+    border-color: var(--line);
+    color: var(--ink);
+}
+
+.btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent-deep);
+}
+
+.error {
+    margin: 0;
+    color: var(--danger);
+    font-size: 0.92rem;
+}
+
+.session {
+    animation: fade-in 0.45s ease both;
+}
+
+.session-label {
+    margin: 0 0 0.25rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.session-login {
+    margin: 0 0 1rem;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@keyframes rise {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .panel {
+        padding: 2rem 1.25rem;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}

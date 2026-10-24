@@ -29,3 +29,8 @@ management:
 
 server:
   port: 8080
+
+app:
+  jwt:
+    secret: "perfume-shop-dev-jwt-secret-key-change-me-32bytes-min"
+    expiration-ms: 3600000

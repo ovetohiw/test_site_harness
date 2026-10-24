@@ -14,27 +14,25 @@
   },
   "features": [
     {
-      "id": "task-001",
+      "id": "task",
       "priority": 1,
       "area": "Application",
-      "title": "Создайние базы данных, change log, docker-compose",
-      "user_visible_behavior": "База данных разворачивается, changelog и docker-compose файлы созданы.",
+      "title": "Создание страницы входа по логину и паролю",
+      "user_visible_behavior": "Новый пользователь может зарегистрироваться и входить по логину и паролю. При обновлении страницы пользователь остается в системе. Токен действует 1 час.",
       "status": "passing",
       "verification": [
-        "Запусти приложение.",
-        "Запусти docker-compose.",
-        "Создай тестовый change файл для базы данных.",
-        "Проверь что все работает и откати изменения в changelog."
+        "Функционал полностью работает. Вход по логину и паролю. Регистрация. Обновление страницы. Токен действует 1 час.",
+        "Сквозные и юнит тесты проходят успешно.",
+        "Приложение корректно стартует и проходит health-check."
       ],
       "evidence": [
-        "docker compose up -d: container perfume-shop-db (postgres:16-alpine) healthy on :5432",
-        "mvn test: 3 tests, BUILD SUCCESS (contextLoads, healthCheckIsUp, liquibaseBaselineTableExists)",
-        "spring-boot:run + GET /actuator/health -> 200 {\"status\":\"UP\"}",
-        "Liquibase applied 001-baseline (schema_baseline) and temporary 002-verification-probe",
-        "mvn liquibase:rollback -Dliquibase.rollbackCount=1: table liquibase_verification_probe dropped; databasechangelog left with only 001-baseline",
-        "002-verification-probe removed from master changelog after successful rollback"
+        "mvnw.cmd test: 10 tests, BUILD SUCCESS (AuthFlowTests 7 + PerfumeShopApplicationTests 3)",
+        "POST /api/auth/register + GET /api/auth/me with Bearer JWT — OK; expiresInMs=3600000",
+        "GET /actuator/health -> {\"status\":\"UP\"}",
+        "GET / serves index.html (Aether login/register UI); token persisted in localStorage and restored via /api/auth/me",
+        "Liquibase 002-users applied (users table); JWT TTL configured as app.jwt.expiration-ms=3600000"
       ],
-      "notes": "Baseline changelog: src/main/resources/db/changelog/. App credentials for local: perfume/perfume @ perfume_shop."
+      "notes": "JWT TTL 1h; session restore via localStorage + GET /api/auth/me. Fixed broken Maven wrapper distributionUrl to 3.9.9."
     }
   ]
 }
