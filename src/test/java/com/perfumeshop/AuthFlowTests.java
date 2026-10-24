@@ -89,6 +89,8 @@ class AuthFlowTests {
         );
         assertThat(meResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(meResponse.getBody().get("login")).isEqualTo(login.toLowerCase());
+        assertThat(meResponse.getBody().get("avatarUrl")).asString().startsWith("/images/");
+        assertThat(meResponse.getBody().get("createdAt")).isNotNull();
     }
 
     @Test

@@ -40,14 +40,14 @@
         sessionView.classList.remove("hidden");
         sessionLogin.textContent = login;
         headline.textContent = "С возвращением";
-        lede.textContent = "Вы уже в системе — можно обновить страницу.";
+        lede.innerHTML = 'Профиль, избранное и история покупок — в <a href="/catalog.html">каталоге</a>.';
     }
 
     function showForm() {
         sessionView.classList.add("hidden");
         form.classList.remove("hidden");
         headline.textContent = "Войдите в кабинет";
-        lede.textContent = "Один аккаунт — доступ к каталогу и заказам.";
+        lede.innerHTML = 'Один аккаунт — доступ к каталогу и заказам. <a href="/catalog.html">Смотреть каталог</a> без входа.';
         passwordInput.value = "";
     }
 

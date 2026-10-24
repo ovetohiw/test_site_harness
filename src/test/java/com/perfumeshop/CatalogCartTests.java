@@ -66,8 +66,9 @@ class CatalogCartTests {
         assertThat(response.getBody()).isNotNull().isNotEmpty();
 
         Map<String, Object> product = response.getBody().get(0);
-        assertThat(product).containsKeys("id", "name", "imageUrl", "price", "description");
+        assertThat(product).containsKeys("id", "name", "brand", "imageUrl", "price", "description");
         assertThat(product.get("name")).isInstanceOf(String.class);
+        assertThat(product.get("brand")).asString().isNotBlank();
         assertThat(product.get("imageUrl")).asString().startsWith("/images/");
         assertThat(product.get("description")).asString().isNotBlank();
         assertThat(((Number) product.get("price")).doubleValue()).isPositive();
@@ -127,6 +128,8 @@ class CatalogCartTests {
         assertThat(response.getBody()).contains("Aether");
         assertThat(response.getBody()).contains("id=\"cart-panel\"");
         assertThat(response.getBody()).contains("id=\"product-grid\"");
+        assertThat(response.getBody()).contains("id=\"sort-field\"");
+        assertThat(response.getBody()).contains("id=\"profile-panel\"");
         assertThat(response.getHeaders().getContentType().toString()).contains(MediaType.TEXT_HTML_VALUE);
     }
 

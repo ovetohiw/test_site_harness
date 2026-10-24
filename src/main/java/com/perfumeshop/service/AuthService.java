@@ -3,6 +3,7 @@ package com.perfumeshop.service;
 import com.perfumeshop.domain.user.User;
 import com.perfumeshop.dto.auth.AuthRequest;
 import com.perfumeshop.dto.auth.AuthResponse;
+import com.perfumeshop.dto.auth.UserResponse;
 import com.perfumeshop.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,6 +51,13 @@ public class AuthService {
         }
 
         return issueToken(login);
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponse currentUser(String login) {
+        User user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized"));
+        return UserResponse.from(user);
     }
 
     private AuthResponse issueToken(String login) {

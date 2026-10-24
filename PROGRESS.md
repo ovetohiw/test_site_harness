@@ -10,6 +10,29 @@
 
 ## Лог сессий
 
+### Сессия 005
+
+- Дата: 2026-10-24
+- Цель: task — сортировка каталога, qty на карточке, профиль (аватар/избранное/история/выход), убрать тех.инфо
+- Сделано:
+  - Liquibase `004-catalog-profile.yaml` (brand, avatar_url, favorites, orders/order_items)
+  - API: products sort, favorites, orders + checkout; enriched `/api/auth/me`
+  - UI: sort toolbar, quantity, profile panel, checkout; index без упоминаний токена
+  - `CatalogProfileTests` (7) → всего 22 теста
+  - Exec plan: `docs/exec-plans/complited/2026-10-24-catalog-profile.md`
+- Запущенная верификация:
+  - `docker compose up -d --build` — OK; app+db healthy на `:8080`
+  - `GET /actuator/health` — UP
+  - `mvnw.cmd test` — 22/22 OK
+  - sort/favorites/checkout smoke — OK
+- Зафиксированные доказательства: см. `feature-list.json` → task.evidence
+- Коммиты: (pending)
+- Обновлённые файлы или артефакты: `src/**`, `feature-list.json`, `PROGRESS.md`, `docs/exec-plans/**`
+- Известный риск или нерешённая проблема:
+  - Корзина не привязана к JWT (только `X-Cart-Id`)
+  - Порт 8080: конфликт локального run и docker `app`
+- Следующий лучший шаг: следующая фича в `feature-list.json`
+
 ### Сессия 004
 
 - Дата: 2026-10-24

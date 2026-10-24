@@ -42,6 +42,8 @@ public class SecurityConfig {
                                 "/css/**", "/js/**", "/images/**", "/favicon.ico"
                         ).permitAll()
                         .requestMatchers("/api/auth/me").authenticated()
+                        .requestMatchers("/api/favorites", "/api/favorites/**").authenticated()
+                        .requestMatchers("/api/orders", "/api/orders/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

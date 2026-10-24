@@ -20,6 +20,9 @@ public class Product {
     @Column(nullable = false, length = 120)
     private String name;
 
+    @Column(nullable = false, length = 120)
+    private String brand;
+
     @Column(name = "image_url", nullable = false, length = 255)
     private String imageUrl;
 
@@ -38,6 +41,10 @@ public class Product {
 
     public String getName() {
         return name;
+    }
+
+    public String getBrand() {
+        return brand;
     }
 
     public String getImageUrl() {

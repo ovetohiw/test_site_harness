@@ -1,0 +1,197 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-add-product-brand
+      author: perfume-shop
+      comment: Brand column for catalog sorting
+      changes:
+        - addColumn:
+            tableName: products
+            columns:
+              - column:
+                  name: brand
+                  type: VARCHAR(120)
+                  constraints:
+                    nullable: true
+        - update:
+            tableName: products
+            columns:
+              - column: { name: brand, value: "Maison Noir" }
+            where: name = 'Noir Ember'
+        - update:
+            tableName: products
+            columns:
+              - column: { name: brand, value: "Atelier Verde" }
+            where: name = 'Verde Mist'
+        - update:
+            tableName: products
+            columns:
+              - column: { name: brand, value: "Loom House" }
+            where: name = 'Amber Loom'
+        - update:
+            tableName: products
+            columns:
+              - column: { name: brand, value: "Coastal Lab" }
+            where: name = 'Salt Petal'
+        - addNotNullConstraint:
+            tableName: products
+            columnName: brand
+            columnDataType: VARCHAR(120)
+      rollback:
+        - dropColumn:
+            tableName: products
+            columnName: brand
+
+  - changeSet:
+      id: 004-add-user-avatar
+      author: perfume-shop
+      comment: Default avatar URL for user profile
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: avatar_url
+                  type: VARCHAR(255)
+                  defaultValue: /images/avatar-default.svg
+                  constraints:
+                    nullable: false
+      rollback:
+        - dropColumn:
+            tableName: users
+            columnName: avatar_url
+
+  - changeSet:
+      id: 004-create-favorites
+      author: perfume-shop
+      comment: User favorite products
+      changes:
+        - createTable:
+            tableName: favorites
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_favorites
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_favorites
+              - column:
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - addForeignKeyConstraint:
+            constraintName: fk_favorites_user
+            baseTableName: favorites
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            constraintName: fk_favorites_product
+            baseTableName: favorites
+            baseColumnNames: product_id
+            referencedTableName: products
+            referencedColumnNames: id
+            onDelete: CASCADE
+      rollback:
+        - dropTable:
+            tableName: favorites
+
+  - changeSet:
+      id: 004-create-orders
+      author: perfume-shop
+      comment: Purchase history for authenticated users
+      changes:
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: total
+                  type: NUMERIC(12, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - addForeignKeyConstraint:
+            constraintName: fk_orders_user
+            baseTableName: orders
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - createTable:
+            tableName: order_items
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: order_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_name
+                  type: VARCHAR(120)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: unit_price
+                  type: NUMERIC(12, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quantity
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            constraintName: fk_order_items_order
+            baseTableName: order_items
+            baseColumnNames: order_id
+            referencedTableName: orders
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            constraintName: fk_order_items_product
+            baseTableName: order_items
+            baseColumnNames: product_id
+            referencedTableName: products
+            referencedColumnNames: id
+      rollback:
+        - dropTable:
+            tableName: order_items
+        - dropTable:
+            tableName: orders

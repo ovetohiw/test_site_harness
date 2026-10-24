@@ -17,8 +17,8 @@
       "id": "task",
       "priority": 1,
       "area": "Application",
-      "title": "Создать страницу с товарами и корзиной",
-      "user_visible_behavior": "Страницу с товарами может смотреть даже анонимный пользователь. Страница хранит товары с названием, картинкой, ценой и кратким описанием. Должна быть возможность добавить товар в корзину, а также удалить товар из корзины.",
+      "title": "Доработка страницы с товарами, корзиной и профилем",
+      "user_visible_behavior": "В каталоге товаров должна быть сортировка по цене, названию и бренду. Также на карточке товара должно быть поле с количеством приобретаемого товара. Если пользователь авторизовался, то вместо кнопки входа должен быть его профиль с аватаркой, информацией о пользователе, историей покупок, избранные товары и кнопкой выхода из аккаунта. Также убрать техническую информацию с страниц которую видят пользователи",
       "status": "passing",
       "verification": [
         "Тесты проходят успешно.",
@@ -26,14 +26,15 @@
         "Функционал полностью работает."
       ],
       "evidence": [
-        "mvnw.cmd test: 15 tests, BUILD SUCCESS (AuthFlowTests 7 + CatalogCartTests 5 + PerfumeShopApplicationTests 3)",
-        "docker compose up -d --build: perfume-shop-app Up (healthy) on 0.0.0.0:8080->8080/tcp; perfume-shop-db healthy",
-        "GET http://localhost:8080/actuator/health -> 200 {\"status\":\"UP\"}",
-        "GET /api/products (anonymous) -> 4 products with name/imageUrl/price/description",
-        "POST /api/cart/items + DELETE /api/cart/items/{id} with X-Cart-Id -> add/remove OK",
-        "GET /catalog.html -> 200"
+        "mvnw.cmd test — 22/22 OK (AuthFlowTests, CatalogCartTests, CatalogProfileTests, PerfumeShopApplicationTests)",
+        "docker compose up -d --build — perfume-shop-app healthy on :8080",
+        "GET /actuator/health — {\"status\":\"UP\"}",
+        "GET /api/products?sort=price&dir=asc — brand present, prices ascending (6500 Coastal Lab first)",
+        "auth favorites + cart qty=2 + POST /api/orders/checkout — orderTotal 13000, GET /api/orders size 1",
+        "catalog.html contains sort-field + profile-panel; index.html without token/JWT copy",
+        "Liquibase 004-catalog-profile applied (brand, avatar_url, favorites, orders)"
       ],
-      "notes": "Anonymous catalog at /catalog.html; cart keyed by X-Cart-Id (UUID in localStorage)."
+      "notes": "Checkout from cart fills purchase history for authenticated users. Cart remains X-Cart-Id based."
     }
   ]
 }

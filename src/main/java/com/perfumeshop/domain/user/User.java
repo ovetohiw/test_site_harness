@@ -23,6 +23,9 @@ public class User {
     @Column(name = "password_hash", nullable = false, length = 100)
     private String passwordHash;
 
+    @Column(name = "avatar_url", nullable = false, length = 255)
+    private String avatarUrl = "/images/avatar-default.svg";
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
 
@@ -44,6 +47,10 @@ public class User {
 
     public String getPasswordHash() {
         return passwordHash;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
     public Instant getCreatedAt() {
