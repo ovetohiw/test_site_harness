@@ -44,6 +44,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/me").authenticated()
                         .requestMatchers("/api/favorites", "/api/favorites/**").authenticated()
                         .requestMatchers("/api/orders", "/api/orders/**").authenticated()
+                        .requestMatchers("/api/crm", "/api/crm/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

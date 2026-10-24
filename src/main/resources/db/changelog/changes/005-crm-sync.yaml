@@ -1,0 +1,62 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-crm-sync-events
+      author: perfume-shop
+      changes:
+        - createTable:
+            tableName: crm_sync_events
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: provider
+                  type: VARCHAR(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: event_type
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_login
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: reference_id
+                  type: VARCHAR(64)
+              - column:
+                  name: external_id
+                  type: VARCHAR(128)
+              - column:
+                  name: status
+                  type: VARCHAR(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: detail
+                  type: VARCHAR(512)
+              - column:
+                  name: created_at
+                  type: TIMESTAMPTZ
+                  constraints:
+                    nullable: false
+                    defaultValueComputed: CURRENT_TIMESTAMP
+        - createIndex:
+            indexName: idx_crm_sync_events_created_at
+            tableName: crm_sync_events
+            columns:
+              - column:
+                  name: created_at
+                  descending: true
+        - createIndex:
+            indexName: idx_crm_sync_events_user_login
+            tableName: crm_sync_events
+            columns:
+              - column:
+                  name: user_login

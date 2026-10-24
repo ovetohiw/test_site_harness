@@ -25,15 +25,18 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
+    private final CrmService crmService;
 
     public OrderService(
             OrderRepository orderRepository,
             CartRepository cartRepository,
-            UserRepository userRepository
+            UserRepository userRepository,
+            CrmService crmService
     ) {
         this.orderRepository = orderRepository;
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
+        this.crmService = crmService;
     }
 
     @Transactional(readOnly = true)
@@ -67,6 +70,7 @@ public class OrderService {
         ShopOrder saved = orderRepository.save(order);
         cart.getItems().clear();
         cartRepository.save(cart);
+        crmService.onSaleCompleted(saved);
 
         return OrderResponse.from(saved);
     }

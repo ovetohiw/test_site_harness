@@ -17,15 +17,18 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final CrmService crmService;
 
     public AuthService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            JwtService jwtService
+            JwtService jwtService,
+            CrmService crmService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.crmService = crmService;
     }
 
     @Transactional
@@ -37,6 +40,7 @@ public class AuthService {
 
         User user = new User(login, passwordEncoder.encode(request.password()));
         userRepository.save(user);
+        crmService.onCustomerRegistered(user);
         return issueToken(login);
     }
 

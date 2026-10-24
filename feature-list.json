@@ -17,24 +17,21 @@
       "id": "task",
       "priority": 1,
       "area": "Application",
-      "title": "Исправление багов",
-      "user_visible_behavior": "Убери надпись \"Смотрите витрину без входа — войдите через кнопку в шапке, чтобы открыть профиль, избранное и оформление заказа.\"",
+      "title": "Добавление CRM",
+      "user_visible_behavior": "Добавить CRM для отслеживания продаж и анализа покупательского поведения. CRM которые нужно подключить: Битрикс24, amoCRM",
       "status": "passing",
       "verification": [
         "Тесты проходят успешно.",
         "Приложение корректно стартует и проходит health-check.",
-        "Ошибки исправлены."
+        "CRM функционирует корректно."
       ],
       "evidence": [
-        "mvnw.cmd test — 23/23 OK (2026-10-24)",
-        "docker compose up -d --build — app+db healthy on :8080",
-        "GET /actuator/health — UP",
-        "Smoke: GET / → 200; body does not contain «Смотрите витрину без входа»; headline «Каталог ароматов» present",
-        "index.html: removed catalog-hero .lede guest copy",
-        "CatalogProfileTests.homePageHasNoTechnicalTokenCopy asserts text absent",
-        "Exec plan: docs/exec-plans/complited/2026-10-24-remove-guest-lede.md"
+        "mvnw.cmd test — 28/28 OK (CrmIntegrationTests 3 + Bitrix24CrmClientTest + AmoCrmClientTest)",
+        "docker compose up -d --build — perfume-shop-app healthy :8080; GET /actuator/health UP",
+        "Smoke: register → CUSTOMER_REGISTERED; favorite → FAVORITE_ADDED; checkout → SALE_COMPLETED для BITRIX24 и AMOCRM (GET /api/crm/events, status SUCCESS); GET /api/crm/status → both providers enabled mode=stub",
+        "Live: BITRIX24_WEBHOOK_BASE_URL, AMOCRM_BASE_URL, AMOCRM_ACCESS_TOKEN"
       ],
-      "notes": "Removed guest lede paragraph from home catalog hero"
+      "notes": "Stub без credentials; сбой CRM не ломает register/checkout."
     }
   ]
 }

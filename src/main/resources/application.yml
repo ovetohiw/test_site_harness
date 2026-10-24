@@ -34,3 +34,15 @@ app:
   jwt:
     secret: "perfume-shop-dev-jwt-secret-key-change-me-32bytes-min"
     expiration-ms: 3600000
+  crm:
+    enabled: true
+    bitrix24:
+      enabled: true
+      # Inbound webhook base URL, e.g. https://example.bitrix24.ru/rest/1/secret/
+      # Empty → stub mode (local SUCCESS events, no HTTP)
+      webhook-base-url: ${BITRIX24_WEBHOOK_BASE_URL:}
+    amocrm:
+      enabled: true
+      # Account base URL + long-lived token; empty → stub mode
+      base-url: ${AMOCRM_BASE_URL:}
+      access-token: ${AMOCRM_ACCESS_TOKEN:}

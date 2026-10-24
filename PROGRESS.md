@@ -10,6 +10,30 @@
 
 ## Лог сессий
 
+### Сессия 009
+
+- Дата: 2026-10-24
+- Цель: task — CRM Bitrix24 + amoCRM
+- Сделано:
+  - Клиенты Bitrix24 (webhook) и amoCRM (API v4); stub без credentials
+  - Хуки: register / checkout / favorite → crm_sync_events
+  - API: GET /api/crm/status, GET /api/crm/events
+  - Liquibase 005-crm-sync; CrmIntegrationTests + client unit tests
+  - Exec plan: docs/exec-plans/complited/2026-10-24-crm-integration.md
+- Запущенная верификация:
+  - docker compose up -d --build — OK; app+db healthy на :8080
+  - GET /actuator/health — UP
+  - mvnw.cmd test — 28/28 OK
+  - Smoke: register/favorite/checkout → 6 SUCCESS (BITRIX24+AMOCRM)
+- Зафиксированные доказательства: см. feature-list.json → task.evidence
+- Коммиты: (pending)
+- Обновлённые файлы или артефакты: src/**/crm/**, services, tests, feature-list.json, PROGRESS.md, docs/exec-plans/**
+- Известный риск или нерешённая проблема:
+  - Без BITRIX24_WEBHOOK_BASE_URL / AMOCRM_* — stub mode
+  - Корзина не привязана к JWT (только X-Cart-Id)
+  - Порт 8080: конфликт локального run и docker app
+- Следующий лучший шаг: следующая фича в feature-list.json
+
 ### Сессия 008
 
 - Дата: 2026-10-24

@@ -20,15 +20,18 @@ public class FavoriteService {
     private final FavoriteRepository favoriteRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final CrmService crmService;
 
     public FavoriteService(
             FavoriteRepository favoriteRepository,
             UserRepository userRepository,
-            ProductRepository productRepository
+            ProductRepository productRepository,
+            CrmService crmService
     ) {
         this.favoriteRepository = favoriteRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
+        this.crmService = crmService;
     }
 
     @Transactional(readOnly = true)
@@ -48,6 +51,7 @@ public class FavoriteService {
 
         if (!favoriteRepository.existsByUserIdAndProductId(user.getId(), productId)) {
             favoriteRepository.save(new Favorite(user, product));
+            crmService.onFavoriteAdded(user, product);
         }
         return list(login);
     }
